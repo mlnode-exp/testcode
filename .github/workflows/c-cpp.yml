@@ -27,7 +27,7 @@ jobs:
         # Identifier of a compiler configuration. Ensure you specify the configuration that matches your compiler.
         compilerConfig: gcc_7-64
         # Test configuration to be used for code analysis.
-        testConfig: builtin://Recommended Rules
+        # testConfig: builtin://Recommended Rules
         # Output folder for reports from code analysis.
         reportDir: reports
         # Format of reports from code analysis.
