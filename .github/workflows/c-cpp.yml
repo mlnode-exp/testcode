@@ -29,7 +29,7 @@ jobs:
         # Test configuration to be used for code analysis.
         testConfig: builtin://Recommended Rules
         # Output folder for reports from code analysis.
-        reportDir: # optional, default is reports
+        reportDir: reports
         # Format of reports from code analysis.
         reportFormat: xml,html,sarif
         # Input scope for analysis (typically, cpptestscan.bdf or compile_commands.json, depending on the project type and the build system).
@@ -38,3 +38,15 @@ jobs:
         additionalParams: # optional, default is 
         # Command line pattern for running C/C++test.
         commandLinePattern: ${cpptestcli} -compiler "${compilerConfig}" -config "${testConfig}" -property report.format=${reportFormat} -report "${reportDir}" -module . -trace make clean all ${additionalParams}
+    # Uploads analysis results in the SARIF format, so that they are displayed as GitHub code scanning alerts.
+    - name: Upload results (SARIF)
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: reports/report.sarif
+    
+    # Uploads an archive that includes all report files (.xml, .html, .sarif).
+    - name: Archive reports
+      uses: actions/upload-artifact@v2
+      with:
+        name: Static analysis reports
+        path: reports/*.*
