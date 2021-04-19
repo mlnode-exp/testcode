@@ -15,17 +15,13 @@ jobs:
     - uses: actions/checkout@v2
     - name: make
       run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
     - name: Run Parasoft C/C++test
       # You may pin to the exact commit or the version.
       # uses: parasoft/run-cpptest-action@104f1c9cf6dbfd4b22e248a41d2e5a1e25e68b9e
       uses: parasoft/run-cpptest-action@1.0.0
       with:
         # Installation folder of Parasoft C/C++test. If not specified, the cpptestcli executable must be added to $PATH.
-        installDir: # optional
+        installDir: /home/mlyko/sesja2021.1/github/cpptest
         # Working directory for running C/C++test.
         workingDir: # optional, default is ${{ github.workspace }}
         # Identifier of a compiler configuration. Ensure you specify the configuration that matches your compiler.
