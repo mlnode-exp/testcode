@@ -37,4 +37,4 @@ jobs:
         # Additional parameters for the cpptestcli executable.
         additionalParams: # optional, default is 
         # Command line pattern for running C/C++test.
-        commandLinePattern: ${cpptestcli} -compiler "${compilerConfig}" -config "${testConfig}" -property report.format=${reportFormat} -report "${reportDir}" -module . -trace make ${additionalParams}
+        commandLinePattern: ${cpptestcli} -compiler "${compilerConfig}" -config "${testConfig}" -property report.format=${reportFormat} -report "${reportDir}" -module . -trace make clean all ${additionalParams}
