@@ -23,7 +23,7 @@ jobs:
         # Installation folder of Parasoft C/C++test. If not specified, the cpptestcli executable must be added to $PATH.
         installDir: /home/mlyko/sesja2021.1/github/cpptest
         # Working directory for running C/C++test.
-        workingDir: /home/mlyko/sesja2021.1/github/_work/testcode/testcode
+        workingDir: /home/mlyko/sesja2021.1/github/actions_runner/_work/testcode/testcode
         # Identifier of a compiler configuration. Ensure you specify the configuration that matches your compiler.
         compilerConfig: gcc_7-64
         # Test configuration to be used for code analysis.
