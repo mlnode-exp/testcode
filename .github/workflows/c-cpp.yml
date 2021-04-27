@@ -15,6 +15,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build with trace
       run: /home/mlyko/sesja2021.1/github/professional/cpptest/bin/cpptesttrace make clean all
+    -name: Prepare for testing
+      run: rm -rf ../workspace
+      run: rm -rf reports
     - name: Run Parasoft C/C++test
       # You may pin to the exact commit or the version.
       # uses: parasoft/run-cpptest-action@104f1c9cf6dbfd4b22e248a41d2e5a1e25e68b9e
