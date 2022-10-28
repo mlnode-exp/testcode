@@ -7,48 +7,44 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  run-cpptest-make:
+    name: Analyze project with C/C++test
 
+    # Specifies the type of runner that the job will run on.
     runs-on: self-hosted
 
+    # Steps represent a sequence of tasks that will be executed as part of the job.
     steps:
-    - uses: actions/checkout@v2
-    - name: Build with trace
-      run: /home/mlyko/sesja2021.1/github/professional/cpptest/bin/cpptesttrace make clean all
-    - name: Prepare for testing
-      run: rm -rf ../workspace reports
-    - name: Run Parasoft C/C++test
-      # You may pin to the exact commit or the version.
-      # uses: parasoft/run-cpptest-action@104f1c9cf6dbfd4b22e248a41d2e5a1e25e68b9e
-      uses: parasoft/run-cpptest-action@1.0.0
-      with:
-        # Installation folder of Parasoft C/C++test. If not specified, the cpptestcli executable must be added to $PATH.
-        installDir: /home/mlyko/sesja2021.1/github/professional/cpptest
-        # Working directory for running C/C++test.
-        #workingDir: /home/mlyko/sesja2021.1/github/actions-runner/_work/testcode/testcode
-        # Identifier of a compiler configuration. Ensure you specify the configuration that matches your compiler.
-        #compilerConfig: gcc_7-64
-        # Test configuration to be used for code analysis.
-        # testConfig: builtin://Recommended Rules
-        # Output folder for reports from code analysis.
-        reportDir: reports
-        # Format of reports from code analysis.
-        #reportFormat: xml,html,sarif
-        # Input scope for analysis (typically, cpptestscan.bdf or compile_commands.json, depending on the project type and the build system).
-        input: cpptestscan.bdf
-        # Additional parameters for the cpptestcli executable.
-        additionalParams: '-localsettings /home/mlyko/sesja2021.1/github/professional/localsettings.properties' 
-        # Command line pattern for running C/C++test.
-        commandLinePattern: ${cpptestcli} -data ../workspace -bdf ${input} -config "${testConfig}" -report "${reportDir}" ${additionalParams}
+
+    # Checks out your repository under $GITHUB_WORKSPACE, so that your job can access it.
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    # Builds your Make project using 'cpptesttrace' to collect input data for code analysis.
+    # Be sure 'cpptesttrace' is available on $PATH.
+    - name: Build project
+      run: cpptesttrace make clean all
+
+    # Runs code analysis with C/C++test.
+    - name: Run C/C++test
+      # Use the 'run-cpptest-action' GitHub action.
+      uses: parasoft/run-cpptest-action@1.0.1
+      # Uncomment if you are using C/C++test 2020.2 to generate a SARIF report:
+      # with:
+      #   reportFormat: xml,html,custom
+      #   additionalParams: '-property report.custom.extension=sarif -property report.custom.xsl.file=${PARASOFT_SARIF_XSL}'
+
     # Uploads analysis results in the SARIF format, so that they are displayed as GitHub code scanning alerts.
     - name: Upload results (SARIF)
-      uses: github/codeql-action/upload-sarif@v1
+      if: always()
+      uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: reports/report.sarif
     
     # Uploads an archive that includes all report files (.xml, .html, .sarif).
     - name: Archive reports
-      uses: actions/upload-artifact@v2
+      if: always()
+      uses: actions/upload-artifact@v3
       with:
-        name: Static analysis reports
+        name: CpptestReports
         path: reports/*.*
